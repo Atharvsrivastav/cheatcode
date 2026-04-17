@@ -254,7 +254,7 @@ export default function App() {
                 <div className="flex items-center justify-between mb-4 text-blue-600 font-bold border-b border-blue-100 pb-2">
                   <div className="flex items-center gap-2">
                     <Sparkles size={18} />
-                    <span>Gemini AI Chat v4 (Confirmed)</span>
+                    <span>Gemini AI Chat v6 (Vercel Sync)</span>
                   </div>
                   <button 
                     onClick={() => {

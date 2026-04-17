@@ -6,10 +6,13 @@ export interface Message {
 }
 
 export async function* sendMessageStream(messages: Message[]) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  // Check both standard and VITE_ prefixed env variables
+  const apiKey = process.env.GEMINI_API_KEY || 
+                 (import.meta as any).env?.VITE_GEMINI_API_KEY || 
+                 process.env.VITE_GEMINI_API_KEY;
   
-  if (!apiKey || apiKey.length < 5) {
-    yield `Error: GEMINI_API_KEY is missing or invalid in this deployment. Please ensure you have set the GEMINI_API_KEY secret in AI Studio before deploying. Current key: ${apiKey ? '***' + apiKey.slice(-3) : 'NONE'}`;
+  if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey.length < 5) {
+    yield `Error: Gemini API Key is missing or invalid. \n\nFound key: ${apiKey ? (apiKey.length > 5 ? '***' + apiKey.slice(-3) : 'Too short') : 'None'} \n\nIf you are on Vercel, you must add GEMINI_API_KEY in Settings > Environment Variables and then REDEPLOY your project.`;
     return;
   }
 
