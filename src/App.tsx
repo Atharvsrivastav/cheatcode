@@ -74,11 +74,17 @@ export default function App() {
           return updated;
         });
       }
-    } catch (error) {
-      setMessages(prev => [
-        ...prev, 
-        { role: 'model', content: "Sorry, I encountered an error. Please try again later." }
-      ]);
+    } catch (error: any) {
+      const errorMsg = error?.message || "I encountered an error. Please try again.";
+      setMessages(prev => {
+        const updated = [...prev];
+        if (updated[updated.length - 1].role === 'model' && !updated[updated.length - 1].content) {
+          updated[updated.length - 1].content = `Error: ${errorMsg}`;
+        } else {
+          updated.push({ role: 'model', content: `Error: ${errorMsg}` });
+        }
+        return updated;
+      });
     } finally {
       setIsAiLoading(false);
     }
