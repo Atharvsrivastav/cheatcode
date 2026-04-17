@@ -8,8 +8,8 @@ export interface Message {
 export async function* sendMessageStream(messages: Message[]) {
   const apiKey = process.env.GEMINI_API_KEY;
   
-  if (!apiKey) {
-    yield "Error: Gemini API Key is missing. Please check your Secrets panel in AI Studio settings.";
+  if (!apiKey || apiKey.length < 5) {
+    yield `Error: Gemini API Key is missing or invalid (${apiKey ? 'Too short' : 'Empty'}). Please check your Secrets in AI Studio.`;
     return;
   }
 
