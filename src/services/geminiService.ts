@@ -6,13 +6,21 @@ export interface Message {
 }
 
 export async function* sendMessageStream(messages: Message[]) {
-  // Check both standard and VITE_ prefixed env variables
-  const apiKey = process.env.GEMINI_API_KEY || 
+  // We use the defined process.env from vite.config.ts or import.meta.env
+  const apiKey = (process.env as any).GEMINI_API_KEY || 
                  (import.meta as any).env?.VITE_GEMINI_API_KEY || 
-                 process.env.VITE_GEMINI_API_KEY;
+                 (process.env as any).VITE_GEMINI_API_KEY;
   
   if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey.length < 5) {
-    yield `Error: Gemini API Key is missing or invalid. \n\nFound key: ${apiKey ? (apiKey.length > 5 ? '***' + apiKey.slice(-3) : 'Too short') : 'None'} \n\nIf you are on Vercel, you must add GEMINI_API_KEY in Settings > Environment Variables and then REDEPLOY your project.`;
+    const diagnostic = `
+      --- DIAGNOSTIC INFO ---
+      Status: API Key Missing
+      Current Key Value: ${apiKey ? '***' + apiKey.slice(-3) : 'NONE'}
+      Detected Method: ${process.env.GEMINI_API_KEY ? 'process.env' : 'none'}
+      Platform: ${typeof window !== 'undefined' ? window.location.hostname : 'unknown'}
+      ----------------------
+    `;
+    yield `Error: Gemini API Key is not found. \n\n${diagnostic}\n\nREMEDY: If you are using Vercel, go to Settings > Environment Variables, add GEMINI_API_KEY, and then REDEPLOY your project.`;
     return;
   }
 
