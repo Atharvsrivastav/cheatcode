@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply antialiased text-[#333] bg-white;
+  }
+}
+
+/* Markdown Specifics for Light Theme */
+.prose {
+  @apply text-gray-800 font-sans;
+}
+
+.prose pre {
+  @apply rounded-lg border border-gray-200 bg-gray-50 p-4 font-mono text-xs overflow-x-auto my-4;
+}
+
+.prose code:not(pre code) {
+  @apply rounded bg-blue-50 text-blue-700 px-1.5 py-0.5 font-mono text-[13px];
+}
+
+.prose p {
+  @apply mb-4 last:mb-0 leading-relaxed;
+}
+
+.prose ul, .prose ol {
+  @apply mb-4 ml-5 list-outside;
+}
+
+.prose li {
+  @apply mb-1.5;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  @apply font-bold tracking-tight text-gray-900 mb-4 mt-6 first:mt-0;
+}
+
+.prose a {
+  @apply text-blue-600 hover:underline;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-blue-200 pl-4 italic text-gray-600 my-4;
+}
+
+/* Custom Scrollbar for IDE */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+/* Monaco fix */
+.monaco-editor {
+  padding-top: 8px !important;
+}
