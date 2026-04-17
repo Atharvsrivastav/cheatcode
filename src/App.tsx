@@ -193,12 +193,20 @@ export default function App() {
       {/* Main Container */}
       <div className="flex-1 flex overflow-hidden relative">
         {/* Editor Area */}
-        <div className="flex-1 border-r border-gray-200 relative bg-white">
+        <div 
+          className="flex-1 border-r border-gray-200 relative bg-white"
+          onClick={() => setShowAiPane(false)}
+        >
           <Editor
             height="100%"
             defaultLanguage={language}
             defaultValue={code}
             onChange={(value) => setCode(value || '')}
+            onMount={(editor) => {
+              // Hide AI pane when the editor is clicked or focused
+              editor.onMouseDown(() => setShowAiPane(false));
+              editor.onDidFocusEditorText(() => setShowAiPane(false));
+            }}
             options={{
               minimap: { enabled: false },
               fontSize: 14,
@@ -246,7 +254,7 @@ export default function App() {
                 <div className="flex items-center justify-between mb-4 text-blue-600 font-bold border-b border-blue-100 pb-2">
                   <div className="flex items-center gap-2">
                     <Sparkles size={18} />
-                    <span>Gemini AI Chat v2</span>
+                    <span>Gemini AI Chat v4 (Confirmed)</span>
                   </div>
                   <button 
                     onClick={() => {

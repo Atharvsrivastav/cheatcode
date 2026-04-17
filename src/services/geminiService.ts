@@ -9,7 +9,7 @@ export async function* sendMessageStream(messages: Message[]) {
   const apiKey = process.env.GEMINI_API_KEY;
   
   if (!apiKey || apiKey.length < 5) {
-    yield `Error: Gemini API Key is missing or invalid (${apiKey ? 'Too short' : 'Empty'}). Please check your Secrets in AI Studio.`;
+    yield `Error: GEMINI_API_KEY is missing or invalid in this deployment. Please ensure you have set the GEMINI_API_KEY secret in AI Studio before deploying. Current key: ${apiKey ? '***' + apiKey.slice(-3) : 'NONE'}`;
     return;
   }
 
@@ -32,14 +32,13 @@ export async function* sendMessageStream(messages: Message[]) {
     });
 
     for await (const chunk of result) {
-      const text = chunk.text;
-      if (text) {
-        yield text;
+      if (chunk.text) {
+        yield chunk.text;
       }
     }
   } catch (error: any) {
     console.error("Gemini API Error Detail:", error);
     const errorMessage = error?.message || "Internal AI Error";
-    yield `Error: ${errorMessage}. Please ensure your API key is valid and you have quota available.`;
+    yield `Error: ${errorMessage}. If you are on Vercel, check your Environment Variables.`;
   }
 }
